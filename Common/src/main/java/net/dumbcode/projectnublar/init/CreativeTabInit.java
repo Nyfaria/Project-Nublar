@@ -9,12 +9,14 @@ import net.dumbcode.projectnublar.api.Quality;
 import net.dumbcode.projectnublar.config.FossilsConfig;
 import net.dumbcode.projectnublar.registration.RegistrationProvider;
 import net.dumbcode.projectnublar.registration.RegistryObject;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -151,7 +153,7 @@ public class CreativeTabInit {
             .build());
 
     public static final RegistryObject<CreativeModeTab> SYRINGE_TAB = CREATIVE_MODE_TABS.register(Constants.MODID + "_syringe", () -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
-            .title(Component.translatable("itemGroup." + Constants.MODID + ".dna"))
+            .title(Component.translatable("itemGroup." + Constants.MODID + ".syringe"))
             .icon(() -> new ItemStack(ItemInit.SYRINGE.get()))
             .displayItems(
                     (itemDisplayParameters, output) -> {
@@ -178,12 +180,14 @@ public class CreativeTabInit {
                                     output.accept(stack);
                                 });
                             } else {
-                                ItemStack stack = new ItemStack(ItemInit.SYRINGE.get());
-                                DNAData dnaData = new DNAData();
-                                dnaData.setEntityType(BuiltInRegistries.ENTITY_TYPE.get(entry));
-                                dnaData.setDnaPercentage(0.5);
-                                stack.getOrCreateTag().put("DNAData", dnaData.saveToNBT(new CompoundTag()));
-                                output.accept(stack);
+                                if(BuiltInRegistries.ENTITY_TYPE.get(entry).create(Minecraft.getInstance().level) instanceof LivingEntity) {
+                                    ItemStack stack = new ItemStack(ItemInit.SYRINGE.get());
+                                    DNAData dnaData = new DNAData();
+                                    dnaData.setEntityType(BuiltInRegistries.ENTITY_TYPE.get(entry));
+                                    dnaData.setDnaPercentage(0.5);
+                                    stack.getOrCreateTag().put("DNAData", dnaData.saveToNBT(new CompoundTag()));
+                                    output.accept(stack);
+                                }
                             }
                         }
                     })

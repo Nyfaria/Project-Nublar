@@ -5,7 +5,7 @@
     ]
   },
   "genes": {
-    "nocturnal": 1.25,
-    "size": 0.75
+    "projectnublar:nocturnal": 1.25,
+    "projectnublar:size": 0.75
   }
 }

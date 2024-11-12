@@ -3,8 +3,8 @@
     "base": []
   },
   "genes": {
-    "intelligence": 1.5,
-    "size": 0.6,
-    "tamability": 1.45
+    "projectnublar:intelligence": 1.5,
+    "projectnublar:size": 0.6,
+    "projectnublar:tamability": 1.45
   }
 }

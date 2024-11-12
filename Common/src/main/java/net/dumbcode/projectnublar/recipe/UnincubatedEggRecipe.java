@@ -6,6 +6,7 @@ import com.google.gson.JsonParseException;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.dumbcode.projectnublar.api.DinoData;
 import net.dumbcode.projectnublar.init.ItemInit;
+import net.dumbcode.projectnublar.init.RecipeInit;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,7 +44,7 @@ public class UnincubatedEggRecipe implements CraftingRecipe {
     }
 
     public RecipeSerializer<?> getSerializer() {
-        return RecipeSerializer.SHAPELESS_RECIPE;
+        return RecipeInit.UNINCUBATED_EGG.get();
     }
 
     /**

@@ -5,9 +5,9 @@
     ]
   },
   "genes": {
-    "fertility": 0.5,
-    "intelligence": 1.2,
-    "speed": 0.8,
-    "tamability": 1.3
+    "projectnublar:fertility": 0.5,
+    "projectnublar:intelligence": 1.2,
+    "projectnublar:speed": 0.8,
+    "projectnublar:tamability": 1.3
   }
 }

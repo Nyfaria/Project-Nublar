@@ -5,8 +5,8 @@
     ]
   },
   "genes": {
-    "intelligence": 1.25,
-    "speed": 0.8,
-    "strength": 1.25
+    "projectnublar:intelligence": 1.25,
+    "projectnublar:speed": 0.8,
+    "projectnublar:strength": 1.25
   }
 }

@@ -5,8 +5,8 @@
     ]
   },
   "genes": {
-    "defense": 1.25,
-    "stomach_capacity": 1.3,
-    "tamability": 1.25
+    "projectnublar:defense": 1.25,
+    "projectnublar:stomach_capacity": 1.3,
+    "projectnublar:tamability": 1.25
   }
 }

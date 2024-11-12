@@ -3604,7 +3604,7 @@
 							"vector": [
 								"-8.3517+math.sin(query.anim_time*180/0.5+60)*5",
 								"math.sin(query.anim_time*180/2.25-60)*-6.7903",
-								"math.sin(query.anim_time*180/2.25-60)*+1.8326"
+								"math.sin(query.anim_time*180/2.25-60)* 1.8326"
 							]
 						},
 						"3.0": {

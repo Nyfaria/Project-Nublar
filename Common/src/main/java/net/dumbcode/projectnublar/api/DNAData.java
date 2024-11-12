@@ -10,12 +10,11 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.TropicalFish;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DNAData {
     private EntityType<?> entityType;
@@ -24,10 +23,19 @@ public class DNAData {
     private FossilPiece fossilPiece;
     private Quality quality;
     boolean isEmbryo;
+    private DyeColor tFish1 = DyeColor.BLACK;
+    private DyeColor tFish2 = DyeColor.BLACK;
 
     public DNAData() {
     }
 
+    public DyeColor gettFish1() {
+        return tFish1;
+    }
+
+    public DyeColor gettFish2() {
+        return tFish2;
+    }
 
     public EntityType<?> getEntityType() {
         return entityType;
@@ -38,7 +46,7 @@ public class DNAData {
     }
 
     public double getDnaPercentage() {
-        if(quality!=null){
+        if (quality != null) {
             return FossilsConfig.getQuality(quality.getName()).dnaYield().get() / 100d;
         }
         return dnaPercentage;
@@ -79,10 +87,12 @@ public class DNAData {
     public void setQuality(Quality quality) {
         this.quality = quality;
     }
-    public String getNameSpace(){
+
+    public String getNameSpace() {
         return BuiltInRegistries.ENTITY_TYPE.getKey(entityType).getNamespace();
     }
-    public String getPath(){
+
+    public String getPath() {
         return BuiltInRegistries.ENTITY_TYPE.getKey(entityType).getPath();
     }
 
@@ -90,32 +100,40 @@ public class DNAData {
     public String getStorageName() {
         return BuiltInRegistries.ENTITY_TYPE.getKey(entityType) + (variant == null ? "" : "_" + variant);
     }
+
     public static void createTooltip(ItemStack stack, List<Component> tooltip) {
         if (stack.hasTag()) {
             DNAData dnaData = loadFromNBT(stack.getTag().getCompound("DNAData"));
             tooltip.add(dnaData.getFormattedType());
             if (dnaData.getDnaPercentage() != 0)
                 tooltip.add(dnaData.getFormattedDNA());
-            if (dnaData.getQuality()!=null){
-                tooltip.add(Component.translatable("quality." + Constants.MODID +"." + dnaData.getQuality().getName()));
+            if (dnaData.getQuality() != null) {
+                tooltip.add(Component.translatable("quality." + Constants.MODID + "." + dnaData.getQuality().getName()));
             }
-            if(dnaData.variant!=null){
+            if (dnaData.variant != null) {
                 tooltip.add(Component.literal(CommonClass.checkReplace(dnaData.variant)));
             }
+            dnaData.addTFishTT(tooltip);
+        }
+    }
+
+    public void addTFishTT(List<Component> tooltip) {
+        if (tFish1 != DyeColor.BLACK) {
+            tooltip.add(Component.translatable("tooltip." + Constants.MODID + ".tropical", Component.translatable("color.minecraft." + tFish1.getName()), Component.translatable("color.minecraft." + tFish2.getName())));
         }
     }
 
     public static DNAData combineDNA(DNAData dna1, DNAData dna2) {
-            DNAData dnaData = new DNAData();
-            if(dna1.getStorageName().equals(dna2.getStorageName())) {
-                dnaData.setEntityType(dna1.getEntityType());
-                dnaData.setDnaPercentage(Math.min(1.0d, dna1.getDnaPercentage() + dna2.getDnaPercentage()));
-                dnaData.setVariant(dna1.getVariant());
-                dnaData.setFossilPiece(dna1.getFossilPiece());
-                dnaData.setQuality(dna1.getQuality());
-                dnaData.setEmbryo(false);
-                return dnaData;
-            }
+        DNAData dnaData = new DNAData();
+        if (dna1.getStorageName().equals(dna2.getStorageName())) {
+            dnaData.setEntityType(dna1.getEntityType());
+            dnaData.setDnaPercentage(Math.min(1.0d, dna1.getDnaPercentage() + dna2.getDnaPercentage()));
+            dnaData.setVariant(dna1.getVariant());
+            dnaData.setFossilPiece(dna1.getFossilPiece());
+            dnaData.setQuality(dna1.getQuality());
+            dnaData.setEmbryo(false);
+            return dnaData;
+        }
         return null;
     }
 
@@ -133,6 +151,7 @@ public class DNAData {
     public MutableComponent getFormattedDNA() {
         return Component.literal(Mth.floor(getDnaPercentage() * 100) + "% DNA");
     }
+
     public MutableComponent getFormattedDNANoDescriptor() {
         return Component.literal(Mth.floor(getDnaPercentage() * 100) + "%");
     }
@@ -151,6 +170,11 @@ public class DNAData {
         return tag;
     }
 
+    public void addTFish(TropicalFish tropicalFish) {
+        tFish1 = tropicalFish.getPatternColor();
+        tFish2 = tropicalFish.getBaseColor();
+    }
+
     public static DNAData loadFromNBT(CompoundTag tag) {
         DNAData dnaData = new DNAData();
         dnaData.setEntityType(BuiltInRegistries.ENTITY_TYPE.get(new ResourceLocation(tag.getString("entityType"))));
@@ -166,10 +190,11 @@ public class DNAData {
         return dnaData;
     }
 
-    public static DNAData fromDrive(ItemStack stack, EntityType<?> entityType){
+    public static DNAData fromDrive(ItemStack stack, EntityType<?> entityType) {
 
         return loadFromNBT(stack.getTag().getCompound("DNAData"));
     }
+
     public static String createStorageKey(EntityType<?> entityType, String variant) {
         return BuiltInRegistries.ENTITY_TYPE.getKey(entityType) + (variant == null ? "" : "_" + variant);
     }

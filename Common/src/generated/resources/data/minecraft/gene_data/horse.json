@@ -23,7 +23,7 @@
     ]
   },
   "genes": {
-    "jump": 1.3,
-    "tamability": 1.4
+    "projectnublar:jump": 1.3,
+    "projectnublar:tamability": 1.4
   }
 }

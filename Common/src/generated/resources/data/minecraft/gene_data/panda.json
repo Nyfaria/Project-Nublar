@@ -6,11 +6,11 @@
     ]
   },
   "genes": {
-    "defense": 0.5,
-    "eat_rate": 0.9,
-    "fertility": 0.7,
-    "speed": 0.8,
-    "stomach_capacity": 1.75,
-    "strength": 1.25
+    "projectnublar:defense": 0.5,
+    "projectnublar:eat_rate": 0.9,
+    "projectnublar:fertility": 0.7,
+    "projectnublar:speed": 0.8,
+    "projectnublar:stomach_capacity": 1.75,
+    "projectnublar:strength": 1.25
   }
 }

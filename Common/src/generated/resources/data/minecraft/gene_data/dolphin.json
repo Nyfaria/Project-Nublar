@@ -5,7 +5,7 @@
     ]
   },
   "genes": {
-    "speed": 1.35,
-    "underwater_capacity": 1.75
+    "projectnublar:speed": 1.35,
+    "projectnublar:underwater_capacity": 1.75
   }
 }

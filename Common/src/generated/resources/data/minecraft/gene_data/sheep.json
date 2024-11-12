@@ -6,7 +6,7 @@
     ]
   },
   "genes": {
-    "herd_size": 1.5,
-    "intelligence": 0.75
+    "projectnublar:herd_size": 1.5,
+    "projectnublar:intelligence": 0.75
   }
 }

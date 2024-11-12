@@ -6,10 +6,10 @@
     ]
   },
   "genes": {
-    "defense": 1.5,
-    "health": 0.75,
-    "immunity": 2.25,
-    "speed": 0.5,
-    "underwater_capacity": 2.25
+    "projectnublar:defense": 1.5,
+    "projectnublar:health": 0.75,
+    "projectnublar:immunity": 2.25,
+    "projectnublar:speed": 0.5,
+    "projectnublar:underwater_capacity": 2.25
   }
 }

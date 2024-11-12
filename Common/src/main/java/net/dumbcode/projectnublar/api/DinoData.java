@@ -2,40 +2,53 @@ package net.dumbcode.projectnublar.api;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.dumbcode.projectnublar.Constants;
+import net.dumbcode.projectnublar.init.GeneInit;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringUtil;
-import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class DinoData {
     public double basePercentage;
     public double incubationProgress = -1;
     public int incubationTimeLeft = -1;
     private EntityType<?> baseDino = null;
-    private Map<EntityInfo,Double> entityPercentages = new HashMap<>();
+    private Map<EntityInfo, Double> entityPercentages = new HashMap<>();
     private Map<Genes.Gene, Double> advancedGenes = new HashMap<>();
     private Map<Genes.Gene, Double> finalGenes = new HashMap<>();
-    private List<DyeColor> layerColors = List.of(
-            DyeColor.GREEN,
-            DyeColor.GREEN
+    private List<Integer> layerColors = Arrays.asList(
+            0xFFFFFF,
+            0xFFFFFF,
+            0xFFFFFF,
+            0xFFFFFF,
+            0xFFFFFF,
+            0xFFFFFF,
+            0xFFFFFF,
+            0xFFFFFF
     );
     private ResourceLocation textureLocation = null;
 
     public DinoData() {
+    }
+
+    public Integer getLayerColor(int layer) {
+        return layerColors.get(layer);
+    }
+
+    public List<Integer> getLayerColors() {
+        return layerColors;
     }
 
     public static DinoData fromStack(ItemStack stack) {
@@ -46,13 +59,6 @@ public class DinoData {
         return entityPercentages;
     }
 
-    public ResourceLocation getTextureLocation() {
-        if (textureLocation == null) {
-            String colorString = layerColors.stream().map(DyeColor::getName).reduce((s1, s2) -> s1 + "_" + s2).orElse("green");
-            textureLocation = Constants.modLoc("textures/entity/dinosaur/" + colorString + ".png");
-        }
-        return textureLocation;
-    }
 
     public void addEntity(EntityInfo type, double percentage) {
         entityPercentages.put(type, percentage);
@@ -71,7 +77,7 @@ public class DinoData {
     }
 
     public void addGeneValue(Genes.Gene gene, double value) {
-        if(!advancedGenes.containsKey(gene)){
+        if (!advancedGenes.containsKey(gene)) {
             advancedGenes.put(gene, value);
         } else {
             advancedGenes.put(gene, advancedGenes.get(gene) + value);
@@ -85,16 +91,17 @@ public class DinoData {
     public EntityType<?> getBaseDino() {
         return baseDino;
     }
+
     public double getEntityPercentage(EntityInfo type) {
         return entityPercentages.getOrDefault(type, 0D);
     }
 
     public void createToolTip(List<Component> components) {
 //        components.add(baseDino.getDescription());
-        if(incubationProgress != -1){
-            components.add(Component.literal(("Incubation Progress: " + (int)NublarMath.round(incubationProgress * 100,0)) + "%"));
+        if (incubationProgress != -1) {
+            components.add(Component.literal(("Incubation Progress: " + (int) NublarMath.round(incubationProgress * 100, 0)) + "%"));
         }
-        if(incubationTimeLeft != -1){
+        if (incubationTimeLeft != -1) {
             components.add(Component.literal(StringUtil.formatTickDuration(incubationTimeLeft)));
         }
         if (finalGenes.isEmpty()) {
@@ -105,7 +112,7 @@ public class DinoData {
 
     public void finalizeGenes() {
         finalGenes.clear();
-        for (Genes.Gene gene : Genes.GENE_STORAGE) {
+        for (Genes.Gene gene : GeneInit.GENES.getEntries().stream().map(Supplier::get).toList()) {
             double value = getFinalGeneValue(gene);
             if (value != 0) {
                 finalGenes.put(gene, value);
@@ -164,7 +171,7 @@ public class DinoData {
                 entityInfo.putString("variant", entry.getKey().variant);
             }
             entityInfo.putDouble("percentage", entry.getValue());
-            entityTag.put("entity_"+i, entityInfo);
+            entityTag.put("entity_" + i, entityInfo);
             i++;
         }
         tag.put("entityPercentages", entityTag);
@@ -201,7 +208,7 @@ public class DinoData {
             data.baseDino = EntityType.byString(tag.getString("baseDino")).get();
         if (tag.contains("incubationProgress"))
             data.incubationProgress = tag.getDouble("incubationProgress");
-        if(tag.contains("incubationTimeLeft"))
+        if (tag.contains("incubationTimeLeft"))
             data.incubationTimeLeft = tag.getInt("incubationTimeLeft");
         return data;
     }
@@ -245,7 +252,7 @@ public class DinoData {
         incubationTimeLeft = v;
     }
 
-    public record EntityInfo(EntityType<?> type, @Nullable String variant){
+    public record EntityInfo(EntityType<?> type, @Nullable String variant) {
         public static Codec<EntityInfo> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
                         BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("type").forGetter(EntityInfo::type),

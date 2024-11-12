@@ -6,8 +6,8 @@
     ]
   },
   "genes": {
-    "health": 0.7,
-    "health_regen": 1.25,
-    "underwater_capacity": 1.5
+    "projectnublar:health": 0.7,
+    "projectnublar:health_regen": 1.25,
+    "projectnublar:underwater_capacity": 1.5
   }
 }

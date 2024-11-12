@@ -1,6 +1,7 @@
 package net.dumbcode.projectnublar;
 
 import net.dumbcode.projectnublar.client.ClientRegistrationHolder;
+import net.dumbcode.projectnublar.client.CommonClientClass;
 import net.dumbcode.projectnublar.init.BlockInit;
 import net.dumbcode.projectnublar.network.NetworkInit;
 import net.fabricmc.api.ClientModInitializer;
@@ -30,5 +31,6 @@ public class ProjectNublarClient implements ClientModInitializer {
         });
         ClientRegistrationHolder.registerItemProperties();
         NetworkInit.registerPackets();
+        CommonClientClass.initClient();
     }
 }

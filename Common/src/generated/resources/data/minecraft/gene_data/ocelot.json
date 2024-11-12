@@ -6,8 +6,8 @@
     ]
   },
   "genes": {
-    "size": 0.4,
-    "speed": 1.5,
-    "tamability": 0.7
+    "projectnublar:size": 0.4,
+    "projectnublar:speed": 1.5,
+    "projectnublar:tamability": 0.7
   }
 }

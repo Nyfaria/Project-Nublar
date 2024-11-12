@@ -5,7 +5,7 @@
     ]
   },
   "genes": {
-    "defense": 1.2,
-    "immunity": 1.25
+    "projectnublar:defense": 1.2,
+    "projectnublar:immunity": 1.25
   }
 }

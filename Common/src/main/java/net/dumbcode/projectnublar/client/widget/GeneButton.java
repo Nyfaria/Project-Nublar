@@ -1,11 +1,13 @@
 package net.dumbcode.projectnublar.client.widget;
 
 import net.dumbcode.projectnublar.api.Genes;
+import net.dumbcode.projectnublar.client.CommonClientClass;
 import net.dumbcode.projectnublar.client.screen.SequencerScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 
 public class GeneButton extends AbstractWidget {
@@ -38,12 +40,17 @@ public class GeneButton extends AbstractWidget {
     @Override
     public void onClick(double pMouseX, double pMouseY) {
         selected = !selected;
-        parent.geneButtons.stream().filter(button->button!=this).forEach(button->button.setSelected(false));
+        parent.geneButtons.stream().filter(button->button!=this).forEach(button-> button.setSelected(false));
         parent.selectedGene = selected ? type : null;
         if(selected) {
             parent.dinoData.addGeneValue(type, 0);
-            parent.slider.setValue(parent.dinoData.getGeneValue(type));
+            parent.removeWidget((AbstractWidget)parent.slider);
+            parent.slider = CommonClientClass.getGeneWidget(type).apply(parent,parent.dinoData);
+            parent.slider.setGene(type,parent.dinoData);
+            parent.addRenderableWidget((AbstractWidget)parent.slider);
         }
+        ((AbstractWidget)parent.slider).active = selected;
+        ((AbstractWidget)parent.slider).visible = selected;
     }
 
     @Override

@@ -6,6 +6,7 @@ import net.dumbcode.projectnublar.init.CreativeTabInit;
 import net.dumbcode.projectnublar.init.DataSerializerInit;
 import net.dumbcode.projectnublar.init.EntityInit;
 import net.dumbcode.projectnublar.init.FeatureInit;
+import net.dumbcode.projectnublar.init.GeneInit;
 import net.dumbcode.projectnublar.init.ItemInit;
 import net.dumbcode.projectnublar.init.LootFunctionInit;
 import net.dumbcode.projectnublar.init.MenuTypeInit;
@@ -35,6 +36,7 @@ public class CommonClass {
         DataSerializerInit.loadClass();
         NetworkInit.registerPackets();
         RecipeInit.loadClass();
+        GeneInit.loadClass();
     }
     public static String checkReplace(String registryObject) {
         return Arrays.stream(registryObject.split("_"))

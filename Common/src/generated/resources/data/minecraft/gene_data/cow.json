@@ -3,6 +3,6 @@
     "base": []
   },
   "genes": {
-    "herd_size": 1.5
+    "projectnublar:herd_size": 1.5
   }
 }

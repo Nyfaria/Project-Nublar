@@ -1,5 +1,6 @@
 package net.dumbcode.projectnublar.client.screen;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
 import com.nyfaria.nyfsguilib.client.widgets.NGLSlider;
 import com.nyfaria.nyfsguilib.client.widgets.ScrollingButtonListWidget;
@@ -14,19 +15,25 @@ import net.dumbcode.projectnublar.client.widget.BorderedButton;
 import net.dumbcode.projectnublar.client.widget.DNASlider;
 import net.dumbcode.projectnublar.client.widget.EntityWidget;
 import net.dumbcode.projectnublar.client.widget.GeneButton;
+import net.dumbcode.projectnublar.client.widget.GeneHolder;
+import net.dumbcode.projectnublar.client.widget.GeneSlider;
 import net.dumbcode.projectnublar.client.widget.IsolatedDataDisplayWidget;
 import net.dumbcode.projectnublar.client.widget.ProgressWidget;
 import net.dumbcode.projectnublar.client.widget.SequenceDataDisplayWidget;
 import net.dumbcode.projectnublar.client.widget.TextScrollBox;
 import net.dumbcode.projectnublar.container.ToggleSlot;
 import net.dumbcode.projectnublar.entity.Dinosaur;
+import net.dumbcode.projectnublar.init.GeneInit;
 import net.dumbcode.projectnublar.item.DiskStorageItem;
 import net.dumbcode.projectnublar.menutypes.SequencerMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -46,6 +53,7 @@ import org.joml.Quaternionf;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class SequencerScreen extends AbstractContainerScreen<SequencerMenu> {
     private static ResourceLocation TEXTURE = Constants.modLoc("textures/gui/sequencer.png");
@@ -76,7 +84,7 @@ public class SequencerScreen extends AbstractContainerScreen<SequencerMenu> {
     private boolean isAdvanced;
     public List<GeneButton> geneButtons = new ArrayList<>();
     public Genes.Gene selectedGene = null;
-    public NGLSlider slider;
+    public GeneHolder slider;
 
     public SequencerScreen(SequencerMenu processorMenu, Inventory inventory, Component component) {
         super(processorMenu, inventory, component);
@@ -297,20 +305,23 @@ public class SequencerScreen extends AbstractContainerScreen<SequencerMenu> {
             return ((SequencerBlockEntity) Minecraft.getInstance().level.getBlockEntity(menu.getPos())).isSynthesizing();
         });
         int index = 0;
+        int geneSize = GeneInit.GENES.getEntries().size();
+        geneButtons.clear();
+        List<Genes.Gene> geneList = GeneInit.GENES.getEntries().stream().map(Supplier::get).toList();
         for (int ya = 0; ya < 20; ya++) {
             for (int xa = 0; xa < 4; xa++) {
                 index = xa + (ya * 4);
-                Genes.Gene gene = index < Genes.GENE_STORAGE.size() ? Genes.GENE_STORAGE.get(index) : null;
-                GeneButton geneButton = new GeneButton(this, leftPos + 20 + (xa * 18), topPos + 30 + (ya * 7), index < Genes.GENE_STORAGE.size() ? Genes.GENE_STORAGE.get(index) : null);
+                Genes.Gene gene = index < geneSize ? geneList.get(index) : null;
+                GeneButton geneButton = new GeneButton(this, leftPos + 20 + (xa * 18), topPos + 30 + (ya * 7), gene);
                 geneButton.active = (gene != null);
                 geneButtons.add(geneButton);
                 this.addWidget(geneButton);
             }
         }
-        slider = new NGLSlider(leftPos + 235, topPos + 50, 100, 20, Component.empty(), Component.literal("%"), -100, 100, 0, true, (slider, value) -> {
+        slider = new GeneSlider(leftPos + 235, topPos + 50, 100, 20, Component.empty(), Component.literal("%"), -100, 100, 0, true, (slider, value) -> {
             dinoData.setGeneValue(selectedGene, value);
         });
-        this.addWidget(slider);
+        this.addWidget((AbstractWidget) slider);
         this.addWidget(entityList);
         this.addWidget(textScrollBox);
         this.addWidget(isolatedTextScrollBox);
@@ -435,19 +446,29 @@ public class SequencerScreen extends AbstractContainerScreen<SequencerMenu> {
     private void enableAdvanced() {
         geneButtons.forEach(button -> {
             button.active = button.type != null;
-            if (button.type != null)
-                button.active = DiskStorageItem.getGeneCompletion(button.type, menu.storageSlot.getItem()) >= 1;
+            if (button.type != null) {
+                double completion = DiskStorageItem.getGeneCompletion(button.type, menu.storageSlot.getItem());
+                button.active = completion >= button.type.requirement();
+            }
         });
         isAdvanced = true;
         dNASliders.forEach(slider -> {
             slider.active = false;
         });
+        listWidget.active = false;
+        entityList.active = false;
+        isolatedWidget.active = false;
 
     }
 
     private void disableAdvanced() {
-        geneButtons.forEach(button -> button.active = false);
-
+        geneButtons.forEach(button -> {
+            button.active = false;
+            button.setSelected(false);
+        });
+        ((AbstractWidget)slider).active = false;
+        ((AbstractWidget)slider).visible = false;
+        selectedGene = null;
     }
 
     @Override
@@ -569,7 +590,7 @@ public class SequencerScreen extends AbstractContainerScreen<SequencerMenu> {
 
     public void enableEditScreen() {
         calculateSliders();
-        if(isAdvanced){
+        if (isAdvanced) {
             enableAdvanced();
         } else {
             disableAdvanced();
@@ -678,7 +699,7 @@ public class SequencerScreen extends AbstractContainerScreen<SequencerMenu> {
         guiGraphics.fill(leftPos + 106, topPos + 25, leftPos + 222, topPos + 123, 0xCF193B59);
         if (sequencingDino != null) {
             guiGraphics.enableScissor(leftPos + 105, topPos + 25, leftPos + 222, topPos + 123);
-            ((Dinosaur)sequencingDino).setDinoData(dinoData);
+            ((Dinosaur) sequencingDino).setDinoData(dinoData);
             InventoryScreen.renderEntityInInventory(guiGraphics, leftPos + 105 + 55, topPos + 25 + 90, 18, new Quaternionf().rotateZ((float) Math.PI).rotateY(90), null, sequencingDino);
             guiGraphics.pose().pushPose();
             guiGraphics.pose().translate(0, 0, 10);
@@ -727,9 +748,9 @@ public class SequencerScreen extends AbstractContainerScreen<SequencerMenu> {
     public void renderAdvancedEditScreen(GuiGraphics guiGraphics, float partialTicks, int mouseX, int mouseY) {
         geneButtons.forEach(geneButton -> geneButton.render(guiGraphics, mouseX, mouseY, partialTicks));
         guiGraphics.drawCenteredString(this.font, Component.literal("Basic"), leftPos + 49, topPos + 10, 0xFFFFFFFF);
-        if(selectedGene != null) {
+        if (selectedGene != null) {
             guiGraphics.drawCenteredString(this.font, selectedGene.getTooltip(), leftPos + 285, topPos + 25, 0xFFFFFFFF);
-            slider.render(guiGraphics, mouseX, mouseY, partialTicks);
+            ((AbstractWidget) slider).render(guiGraphics, mouseX, mouseY, partialTicks);
         }
     }
 
@@ -846,25 +867,24 @@ public class SequencerScreen extends AbstractContainerScreen<SequencerMenu> {
         if (!getMenu().storageSlot.getItem().hasTag()) {
             return;
         }
-        for (Genes.Gene gene : Genes.GENE_STORAGE) {
+        for (Genes.Gene gene : GeneInit.GENES.getEntries().stream().map(Supplier::get).toList()) {
             double totalPercent = 0;
             String geneInfo = CommonClass.checkReplace(gene.name()) + " ";
             for (String key : getMenu().storageSlot.getItem().getTag().getAllKeys()) {
                 DNAData data = DNAData.loadFromNBT(getMenu().storageSlot.getItem().getTag().getCompound(key));
-                if (gene.entities().containsKey(data.getEntityType())) {
+                if (Genes.GENE_STORAGE.get(gene).stream().map(Pair::getFirst).toList().contains(data.getEntityType())) {
                     totalPercent += data.getDnaPercentage();
                 }
             }
-            double genePercent = totalPercent / gene.entities().size();
+            double genePercent = totalPercent / Genes.GENE_STORAGE.get(gene).size();
             if (totalPercent > 0) {
                 isolatedWidget.addButton(new IsolatedDataDisplayWidget(0, 0, 120, 14, geneInfo + NublarMath.round(genePercent * 100, 2) + "%", (button, selected) -> {
                     if (selected) {
                         List<Component> dinoDnas = new ArrayList<>();
-                        List<EntityType<?>> entities = new ArrayList<>();
-                        entities.addAll(gene.entities().keySet());
+                        List<EntityType<?>> entities = new ArrayList<>(Genes.GENE_STORAGE.get(gene).stream().map(Pair::getFirst).toList());
                         for (String key : getMenu().storageSlot.getItem().getTag().getAllKeys()) {
                             DNAData data = DNAData.loadFromNBT(getMenu().storageSlot.getItem().getTag().getCompound(key));
-                            if (gene.entities().containsKey(data.getEntityType())) {
+                            if (Genes.GENE_STORAGE.get(gene).stream().map(Pair::getFirst).toList().contains(data.getEntityType())) {
                                 entities.remove(data.getEntityType());
                                 dinoDnas.add(data.getFormattedType().append(" ").append(data.getFormattedDNANoDescriptor()));
                             }
@@ -930,7 +950,7 @@ public class SequencerScreen extends AbstractContainerScreen<SequencerMenu> {
             if (entry.getKey().type() != dinoData.getBaseDino()) {
                 boolean shouldAdd = true;
                 for (DNASlider slider : dNASliders) {
-                    if(slider.getEntityType() == entry.getKey().type()) {
+                    if (slider.getEntityType() == entry.getKey().type()) {
                         shouldAdd = false;
                     }
                     if (slider.getEntityType() == null && shouldAdd) {
@@ -944,5 +964,33 @@ public class SequencerScreen extends AbstractContainerScreen<SequencerMenu> {
                 }
             }
         }
+    }
+
+    public int leftPos() {
+        return leftPos;
+    }
+
+    public int topPos() {
+        return topPos;
+    }
+
+    @Override
+    public <T extends GuiEventListener & Renderable & NarratableEntry> T addRenderableWidget(T pWidget) {
+        return super.addRenderableWidget(pWidget);
+    }
+
+    @Override
+    public void removeWidget(GuiEventListener pListener) {
+        super.removeWidget(pListener);
+    }
+
+    @Override
+    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+        return super.mouseScrolled(pMouseX, pMouseY, pDelta);
+    }
+
+    @Override
+    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+        return super.keyPressed(pKeyCode, pScanCode, pModifiers);
     }
 }

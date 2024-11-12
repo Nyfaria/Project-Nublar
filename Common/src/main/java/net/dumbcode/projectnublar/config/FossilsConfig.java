@@ -71,20 +71,20 @@ public class FossilsConfig {
         builder.comment("defines the depths of each time period for generation, this list is incomplete and the values are examples, DC team to populate a full list once the systems are in place to do so");
         builder.push("carboniferous");
         carboniferous = new Period(
-                builder.comment("the min y value that this period generates in").defineInRange("min_y", 2, -64, 255),
-                builder.comment("the max y value that this period generates in").defineInRange("max_y", 20, -64, 255),
+                builder.comment("the min y layerName that this period generates in").defineInRange("min_y", 2, -64, 255),
+                builder.comment("the max y layerName that this period generates in").defineInRange("max_y", 20, -64, 255),
                 builder.comment("the rarity modifier to apply to the \"will generate\" method of this vein").defineInRange("rarity_mod", 0.5, 0.0, 1.0));
         builder.pop();
         builder.push("jurassic");
         jurassic = new Period(
-                builder.comment("the min y value that this period generates in").defineInRange("min_y", -12, -64, 255),
-                builder.comment("the max y value that this period generates in").defineInRange("max_y", 10, -64, 255),
+                builder.comment("the min y layerName that this period generates in").defineInRange("min_y", -12, -64, 255),
+                builder.comment("the max y layerName that this period generates in").defineInRange("max_y", 10, -64, 255),
                 builder.comment("the rarity modifier to apply to the \"will generate\" method of this vein").defineInRange("rarity_mod", 0.4, 0.0, 1.0));
         builder.pop();
         builder.push("cretaceous");
         cretaceous = new Period(
-                builder.comment("the min y value that this period generates in").defineInRange("min_y", 40, -64, 255),
-                builder.comment("the max y value that this period generates in").defineInRange("max_y", 56, -64, 255),
+                builder.comment("the min y layerName that this period generates in").defineInRange("min_y", 40, -64, 255),
+                builder.comment("the max y layerName that this period generates in").defineInRange("max_y", 56, -64, 255),
                 builder.comment("the rarity modifier to apply to the \"will generate\" method of this vein").defineInRange("rarity_mod", 0.4, 0.0, 1.0));
         builder.pop();
         builder.pop();

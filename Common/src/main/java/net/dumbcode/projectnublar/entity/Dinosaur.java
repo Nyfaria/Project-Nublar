@@ -1,6 +1,7 @@
 package net.dumbcode.projectnublar.entity;
 
 import net.dumbcode.projectnublar.api.DinoData;
+import net.dumbcode.projectnublar.client.renderer.layer.DinoLayer;
 import net.dumbcode.projectnublar.entity.api.FossilRevived;
 import net.dumbcode.projectnublar.init.DataSerializerInit;
 import net.minecraft.nbt.CompoundTag;
@@ -9,6 +10,7 @@ import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.PathfinderMob;
@@ -22,6 +24,7 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.Color;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
@@ -43,17 +46,17 @@ public class Dinosaur extends PathfinderMob implements FossilRevived, GeoEntity 
     public DinoData getDinoData() {
         return this.entityData.get(DINO_DATA);
     }
-    @Override
-    public void push(Entity pEntity) {
-        super.push(pEntity);
+
+    public Color layerColor(int layer, DinoLayer dinoLayer) {
+        if(dinoLayer != null && dinoLayer.getBasicLayer() == -1){
+            return new Color(0xFFFFFFFF);
+        }
+        if(layer >= this.getDinoData().getLayerColors().stream().count()){
+            return new Color(Mth.floor(this.getDinoData().getLayerColor(dinoLayer.getBasicLayer())));
+        }
+        return new Color(Mth.floor(this.getDinoData().getLayerColor(layer)));
     }
 
-    public ResourceLocation getTextureLocation(){
-        if(true){
-            return new ResourceLocation("projectnublar:textures/entity/tyrannosaurus_rex.png");
-        }
-        return this.entityData.get(DINO_DATA).getTextureLocation();
-    }
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();

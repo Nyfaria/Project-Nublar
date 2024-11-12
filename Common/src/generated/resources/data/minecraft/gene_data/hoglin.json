@@ -5,11 +5,11 @@
     ]
   },
   "genes": {
-    "aggression": 1.85,
-    "defense": 1.3,
-    "heat_resistance": 1.5,
-    "size": 1.75,
-    "strength": 1.5,
-    "tamability": 0.5
+    "projectnublar:aggression": 1.85,
+    "projectnublar:defense": 1.3,
+    "projectnublar:heat_resistance": 1.5,
+    "projectnublar:size": 1.75,
+    "projectnublar:strength": 1.5,
+    "projectnublar:tamability": 0.5
   }
 }

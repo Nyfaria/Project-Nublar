@@ -1,5 +1,6 @@
 package net.dumbcode.projectnublar.block;
 
+import net.dumbcode.projectnublar.block.api.MultiBlock;
 import net.dumbcode.projectnublar.block.api.MultiEntityBlock;
 import net.dumbcode.projectnublar.block.entity.IncubatorBlockEntity;
 import net.dumbcode.projectnublar.client.ModShapes;
@@ -36,7 +37,7 @@ public class IncubatorBlock extends MultiEntityBlock {
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide && pHand == InteractionHand.MAIN_HAND) {
-            BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
+            BlockEntity blockEntity = pLevel.getBlockEntity(MultiBlock.getCorePos(pState, pPos));
             ItemStack stack = pPlayer.getMainHandItem();
             if (blockEntity instanceof IncubatorBlockEntity incubator) {
                 if (stack.getItem() instanceof BulbItem) {

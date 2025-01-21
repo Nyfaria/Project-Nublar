@@ -67,6 +67,7 @@ public class ItemInit {
     public static final RegistryObject<Item> INCUBATOR_ARM = ITEMS.register("incubator_arm", () -> new Item(getItemProperties()));
     public static final RegistryObject<Item> INCUBATED_EGG = ITEMS.register("incubated_egg", () -> new IncubatedEggItem(getItemProperties()));
     public static final RegistryObject<Item> LEVELING_SENSOR = ITEMS.register("leveling_sensor", () -> new Item(getItemProperties()));
+    public static final RegistryObject<Item> WIRE_SPOOL = ITEMS.register("wire_spool", () -> new Item(getItemProperties()));
     public static RegistryObject<Item> registerSingleItem(String name) {
         return ITEMS.register(name, () -> new Item(getItemProperties().stacksTo(1)));
     }

@@ -27,6 +27,7 @@ dependencies {
     modImplementation "com.nyfaria.nyfsguilib:nyfsguilib-fabric-${minecraft_version}:${ngl_version}"
     include("com.nyfaria.nyfsguilib:nyfsguilib-fabric-${minecraft_version}:${ngl_version}")
     modImplementation include('mysticdrew:common-networking-fabric:1.0.5-1.20.1')
+    modImplementation include("earth.terrarium.botarium:botarium-fabric-1.20.1:2.3.4")
 }
 
 loom {

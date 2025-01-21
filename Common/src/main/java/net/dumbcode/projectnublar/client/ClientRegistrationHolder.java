@@ -7,9 +7,12 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.dumbcode.projectnublar.Constants;
 import net.dumbcode.projectnublar.block.entity.IncubatorBlockEntity;
 import net.dumbcode.projectnublar.client.renderer.DinosaurRenderer;
+import net.dumbcode.projectnublar.client.renderer.ElectricFenceRenderer;
+import net.dumbcode.projectnublar.client.renderer.ElectricWireRenderer;
 import net.dumbcode.projectnublar.client.renderer.ProcessorRenderer;
 import net.dumbcode.projectnublar.client.renderer.SequencerRenderer;
 import net.dumbcode.projectnublar.client.screen.EggPrinterScreen;
+import net.dumbcode.projectnublar.client.screen.GeneratorScreen;
 import net.dumbcode.projectnublar.client.screen.IncubatorScreen;
 import net.dumbcode.projectnublar.client.screen.ProcessorScreen;
 import net.dumbcode.projectnublar.client.screen.SequencerScreen;
@@ -17,6 +20,7 @@ import net.dumbcode.projectnublar.init.BlockInit;
 import net.dumbcode.projectnublar.init.EntityInit;
 import net.dumbcode.projectnublar.init.ItemInit;
 import net.dumbcode.projectnublar.init.MenuTypeInit;
+import net.dumbcode.projectnublar.menutypes.GeneratorMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -51,6 +55,7 @@ public class ClientRegistrationHolder {
         MenuScreens.register(MenuTypeInit.SEQUENCER.get(), SequencerScreen::new);
         MenuScreens.register(MenuTypeInit.EGG_PRINTER.get(), EggPrinterScreen::new);
         MenuScreens.register(MenuTypeInit.INCUBATOR.get(), IncubatorScreen::new);
+        MenuScreens.register(MenuTypeInit.GENERATOR_MENU.get(), GeneratorScreen::new);
         Minecraft.getInstance().getTextureManager().register(Constants.modLoc("textures/entity/tyrannosaurus_rex.png"), createTexture());
     }
 
@@ -83,6 +88,8 @@ public class ClientRegistrationHolder {
                 return RenderType.entityTranslucent(texture);
             }
         });
+        map.put(BlockInit.ELECTRIC_FENCE_POST_BLOCK_ENTITY, (c)-> new ElectricFenceRenderer());
+        map.put(BlockInit.ELECTRIC_FENCE_BLOCK_ENTITY, (c)-> new ElectricWireRenderer());
         return map;
     }
 

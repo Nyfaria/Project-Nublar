@@ -1,5 +1,8 @@
 package net.dumbcode.projectnublar.block.entity;
 
+import earth.terrarium.botarium.common.energy.base.BotariumEnergyBlock;
+import earth.terrarium.botarium.common.energy.impl.InsertOnlyEnergyContainer;
+import earth.terrarium.botarium.common.energy.impl.WrappedBlockEnergyContainer;
 import net.dumbcode.projectnublar.api.NublarMath;
 import net.dumbcode.projectnublar.api.DNAData;
 import net.dumbcode.projectnublar.block.api.SyncingContainerBlockEntity;
@@ -30,7 +33,7 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class ProcessorBlockEntity extends SyncingContainerBlockEntity implements GeoBlockEntity {
+public class ProcessorBlockEntity extends SyncingContainerBlockEntity implements GeoBlockEntity, BotariumEnergyBlock<WrappedBlockEnergyContainer> {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     ItemStack water = ItemStack.EMPTY;
     ItemStack input = ItemStack.EMPTY;
@@ -41,6 +44,7 @@ public class ProcessorBlockEntity extends SyncingContainerBlockEntity implements
     NonNullList<ItemStack> output = NonNullList.withSize(9, ItemStack.EMPTY);
     float fluidLevel = 0;;
     int cookingProgress = 0;
+    private WrappedBlockEnergyContainer energyContainer;
 
     protected final ContainerData dataAccess = new ContainerData() {
         public int get(int slot) {
@@ -86,6 +90,7 @@ public class ProcessorBlockEntity extends SyncingContainerBlockEntity implements
             if (be.cookingProgress < be.getMaxProcessingTime()) {
                 be.cookingProgress++;
                 be.fluidLevel -= 250f / be.getMaxProcessingTime();
+                be.getEnergyStorage().internalExtract(calculateEnergyConsumption(), true);
             } else {
                 be.cookingProgress = 0;
                 ItemStack stack = new ItemStack(ItemInit.TEST_TUBE_ITEM.get());
@@ -109,6 +114,23 @@ public class ProcessorBlockEntity extends SyncingContainerBlockEntity implements
             be.updateBlock();
         }
     }
+    public int calculateEnergyConsumption(){
+        int c = 32;
+        if(chipUpgrade.getItem() == ItemInit.DIAMOND_COMPUTER_CHIP.get()) {
+            c += 32;
+        }
+        if(chipUpgrade.getItem() == ItemInit.GOLD_COMPUTER_CHIP.get()) {
+            c += 16;
+        }
+        if(chipUpgrade.getItem() == ItemInit.IRON_COMPUTER_CHIP.get()) {
+            c += 8;
+        }
+        return c;
+    }
+    @Override
+    public WrappedBlockEnergyContainer getEnergyStorage() {
+        return energyContainer == null ? this.energyContainer = new WrappedBlockEnergyContainer(this, new InsertOnlyEnergyContainer(1000,1000)) : this.energyContainer;
+    }
 
     public void saveData(CompoundTag pTag) {
         pTag.put("water", water.save(new CompoundTag()));
@@ -122,6 +144,7 @@ public class ProcessorBlockEntity extends SyncingContainerBlockEntity implements
         pTag.put("filter", filter.save(new CompoundTag()));
         pTag.put("tankUpgrade", tankUpgrade.save(new CompoundTag()));
         pTag.put("chipUpgrade", chipUpgrade.save(new CompoundTag()));
+        pTag.put("energy", energyContainer.serialize(new CompoundTag()));
     }
 
     public void loadData(CompoundTag pTag) {
@@ -136,6 +159,7 @@ public class ProcessorBlockEntity extends SyncingContainerBlockEntity implements
         filter = ItemStack.of(pTag.getCompound("filter"));
         tankUpgrade = ItemStack.of(pTag.getCompound("tankUpgrade"));
         chipUpgrade = ItemStack.of(pTag.getCompound("chipUpgrade"));
+        energyContainer.deserialize(pTag.getCompound("energy"));
     }
 
 

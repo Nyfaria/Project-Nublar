@@ -2,6 +2,7 @@ package net.dumbcode.projectnublar.init;
 
 import net.dumbcode.projectnublar.Constants;
 import net.dumbcode.projectnublar.menutypes.EggPrinterMenu;
+import net.dumbcode.projectnublar.menutypes.GeneratorMenu;
 import net.dumbcode.projectnublar.menutypes.IncubatorMenu;
 import net.dumbcode.projectnublar.menutypes.ProcessorMenu;
 import net.dumbcode.projectnublar.menutypes.SequencerMenu;
@@ -18,6 +19,7 @@ public class MenuTypeInit {
     public static RegistryObject<MenuType<SequencerMenu>> SEQUENCER = MENU_TYPES.register("sequencer", Services.PLATFORM::registerSequenceMenu);
     public static RegistryObject<MenuType<EggPrinterMenu>> EGG_PRINTER = MENU_TYPES.register("egg_printer", () -> new MenuType<>(EggPrinterMenu::new, FeatureFlags.VANILLA_SET));
     public static RegistryObject<MenuType<IncubatorMenu>> INCUBATOR = MENU_TYPES.register("incubator", Services.PLATFORM::registerIncubatorMenu);
+    public static RegistryObject<MenuType<GeneratorMenu>> GENERATOR_MENU = MENU_TYPES.register("generator", ()-> new MenuType<>(GeneratorMenu::new, FeatureFlags.VANILLA_SET));
 
     public static void loadClass() {
 

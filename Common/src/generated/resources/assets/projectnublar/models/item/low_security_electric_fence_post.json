@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "projectnublar:item/low_security_electric_fence_post"
+  }
+}

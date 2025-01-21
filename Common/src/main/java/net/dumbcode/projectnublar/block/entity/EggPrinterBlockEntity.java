@@ -1,5 +1,8 @@
 package net.dumbcode.projectnublar.block.entity;
 
+import earth.terrarium.botarium.common.energy.base.BotariumEnergyBlock;
+import earth.terrarium.botarium.common.energy.impl.InsertOnlyEnergyContainer;
+import earth.terrarium.botarium.common.energy.impl.WrappedBlockEnergyContainer;
 import net.dumbcode.projectnublar.block.api.IMachineParts;
 import net.dumbcode.projectnublar.block.api.SyncingContainerBlockEntity;
 import net.dumbcode.projectnublar.init.BlockInit;
@@ -22,7 +25,7 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class EggPrinterBlockEntity extends SyncingContainerBlockEntity implements GeoBlockEntity, IMachineParts {
+public class EggPrinterBlockEntity extends SyncingContainerBlockEntity implements GeoBlockEntity, IMachineParts, BotariumEnergyBlock<WrappedBlockEnergyContainer> {
     private AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private ItemStack embryoInput = ItemStack.EMPTY;
     private ItemStack bonemealInput = ItemStack.EMPTY;
@@ -75,6 +78,7 @@ public class EggPrinterBlockEntity extends SyncingContainerBlockEntity implement
     };
     private ItemStack sensor = ItemStack.EMPTY;
     private ItemStack chip = ItemStack.EMPTY;
+    private WrappedBlockEnergyContainer energyContainer;
 
     public EggPrinterBlockEntity(BlockPos pos, BlockState state) {
         super(BlockInit.EGG_PRINTER_BLOCK_ENTITY.get(), pos, state);
@@ -93,8 +97,9 @@ public class EggPrinterBlockEntity extends SyncingContainerBlockEntity implement
             bonemealInput.shrink(1);
             shouldUpdate = true;
         }
-        isPrinting = !embryoInput.isEmpty() && bonemealAmount >= 16 && eggOutput.isEmpty();
+        isPrinting = !embryoInput.isEmpty() && bonemealAmount >= 16 && eggOutput.isEmpty() && getEnergyStorage().getStoredEnergy() > 32;
         if(isPrinting){
+            getEnergyStorage().internalExtract(calculateEnergyConsumption(),true);
             progress += 1;
             if(progress >= getMaxProgress()){
                 progress = 0;
@@ -113,6 +118,26 @@ public class EggPrinterBlockEntity extends SyncingContainerBlockEntity implement
         if(shouldUpdate){
             updateBlock();
         }
+    }
+    public int calculateEnergyConsumption(){
+        int c = 32;
+        if(chip.getItem() == ItemInit.DIAMOND_COMPUTER_CHIP.get()) {
+            c += 24;
+        }
+        if(chip.getItem() == ItemInit.IRON_COMPUTER_CHIP.get()) {
+            c += 8;
+        }
+        if(chip.getItem() == ItemInit.GOLD_COMPUTER_CHIP.get()) {
+            c += 16;
+        }
+        if(!sensor.isEmpty()){
+            c +=8;
+        }
+        return c;
+    }
+    @Override
+    public WrappedBlockEnergyContainer getEnergyStorage() {
+        return energyContainer == null ? this.energyContainer = new WrappedBlockEnergyContainer(this, new InsertOnlyEnergyContainer(1000,1000)) : this.energyContainer;
     }
     @Override
     protected void saveData(CompoundTag tag) {

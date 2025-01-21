@@ -106,6 +106,8 @@ public class CreativeTabInit {
                         output.accept(ItemInit.INCUBATOR_ARM_BASE.get());
                         output.accept(ItemInit.INCUBATOR_LID.get());
                         output.accept(ItemInit.INCUBATOR_NEST.get());
+                        output.accept(BlockInit.COAL_GENERATOR.get());
+                        output.accept(BlockInit.CREATIVE_GENERATOR.get());
                     })
             .build());
     public static final RegistryObject<CreativeModeTab> MISC_TAB = CREATIVE_MODE_TABS.register(Constants.MODID + "_misc", () -> CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
@@ -131,6 +133,9 @@ public class CreativeTabInit {
                         output.accept(ItemInit.HOT_BULB.get());
                         output.accept(ItemInit.IRON_PLANT_TANK.get());
                         output.accept(ItemInit.GOLD_PLANT_TANK.get());
+                        output.accept(BlockInit.HIGH_SECURITY_ELECTRIC_FENCE_POST.get());
+                        output.accept(BlockInit.LOW_SECURITY_ELECTRIC_FENCE_POST.get());
+                        output.accept(ItemInit.WIRE_SPOOL.get());
 
                     })
             .build());

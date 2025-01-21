@@ -69,7 +69,11 @@ subprojects {
         maven {
             url = "https://jm.gserv.me/repository/maven-public/"
         }
+        maven {
+            url "https://maven.resourcefulbees.com/repository/maven-public/"
+        }
         maven hundredMedia.get100MediaPublicMaven()
+        maven { url = "https://mvn.devos.one/releases/" }
     }
 
     tasks.withType(JavaCompile).configureEach {

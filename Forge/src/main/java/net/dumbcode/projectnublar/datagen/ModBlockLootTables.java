@@ -34,7 +34,9 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                         BlockInit.PROCESSOR,
                         BlockInit.SEQUENCER,
                         BlockInit.EGG_PRINTER,
-                        BlockInit.INCUBATOR
+                        BlockInit.INCUBATOR,
+                        BlockInit.HIGH_SECURITY_ELECTRIC_FENCE_POST,
+                        BlockInit.LOW_SECURITY_ELECTRIC_FENCE_POST
                 )
                 .stream()
                 .map(RegistryObject::get)

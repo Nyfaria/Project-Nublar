@@ -1,7 +1,9 @@
 package net.dumbcode.projectnublar.block;
 
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class AmberBlock extends Block {
     final ResourceLocation entityType;

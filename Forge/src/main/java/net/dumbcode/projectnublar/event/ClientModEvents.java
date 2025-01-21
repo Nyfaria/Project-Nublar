@@ -5,6 +5,7 @@ import net.dumbcode.projectnublar.client.ClientRegistrationHolder;
 import net.dumbcode.projectnublar.client.CommonClientClass;
 import net.dumbcode.projectnublar.client.model.fossil.FossilModelLoader;
 import net.dumbcode.projectnublar.client.model.testtube.TestTubeModelLoader;
+
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
@@ -12,7 +13,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-import java.io.IOException;
 
 @Mod.EventBusSubscriber(modid = Constants.MODID,value= Dist.CLIENT,bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientModEvents {

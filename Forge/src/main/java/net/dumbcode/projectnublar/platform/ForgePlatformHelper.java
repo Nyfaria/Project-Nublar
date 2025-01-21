@@ -1,21 +1,17 @@
 package net.dumbcode.projectnublar.platform;
 
-import com.ibm.icu.impl.Trie;
 import net.dumbcode.projectnublar.menutypes.IncubatorMenu;
 import net.dumbcode.projectnublar.menutypes.SequencerMenu;
 import net.dumbcode.projectnublar.platform.services.IPlatformHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.network.NetworkHooks;
-import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.function.Consumer;
 
@@ -52,4 +48,7 @@ public class ForgePlatformHelper<T extends AbstractContainerMenu> implements IPl
     public void openMenu(ServerPlayer player, MenuProvider provider, Consumer<FriendlyByteBuf> buf) {
         NetworkHooks.openScreen(player, provider, buf);
     }
+
+
+
 }

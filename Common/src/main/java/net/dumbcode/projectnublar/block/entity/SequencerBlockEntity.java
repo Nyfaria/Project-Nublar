@@ -1,5 +1,8 @@
 package net.dumbcode.projectnublar.block.entity;
 
+import earth.terrarium.botarium.common.energy.base.BotariumEnergyBlock;
+import earth.terrarium.botarium.common.energy.impl.InsertOnlyEnergyContainer;
+import earth.terrarium.botarium.common.energy.impl.WrappedBlockEnergyContainer;
 import net.dumbcode.projectnublar.api.DNAData;
 import net.dumbcode.projectnublar.api.DinoData;
 import net.dumbcode.projectnublar.block.api.IMachineParts;
@@ -32,7 +35,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 
-public class SequencerBlockEntity extends SyncingContainerBlockEntity implements GeoBlockEntity, IMachineParts {
+public class SequencerBlockEntity extends SyncingContainerBlockEntity implements GeoBlockEntity, IMachineParts, BotariumEnergyBlock<WrappedBlockEnergyContainer> {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private ItemStack storage = ItemStack.EMPTY;
     private ItemStack dna_input = ItemStack.EMPTY;
@@ -56,6 +59,7 @@ public class SequencerBlockEntity extends SyncingContainerBlockEntity implements
     private DinoData dinoData = new DinoData();
     private boolean isSynthesizing = false;
     private int synthTime = 0;
+    private WrappedBlockEnergyContainer energyContainer;
 
     protected final ContainerData dataAccess = new ContainerData() {
         public int get(int slot) {
@@ -205,6 +209,7 @@ public class SequencerBlockEntity extends SyncingContainerBlockEntity implements
             }
             if(isSynthesizing && canSynth()){
                 synthTime++;
+                getEnergyStorage().internalExtract(calculateEnergyConsumption(),true);
                 if(synthTime > getMaxSynthTime()){
                     synthTime = 0;
                     dna_test_tube_output = new ItemStack(ItemInit.TEST_TUBE_ITEM.get());
@@ -222,6 +227,20 @@ public class SequencerBlockEntity extends SyncingContainerBlockEntity implements
                 updateBlock();
             }
         }
+    }
+    public int calculateEnergyConsumption(){
+        int c = 32;
+        if(computer_chip.getItem() == ItemInit.GOLD_COMPUTER_CHIP.get()) {
+            c += 32;
+        }
+        if(computer_chip.getItem() == ItemInit.IRON_COMPUTER_CHIP.get()) {
+            c += 16;
+        }
+        return c;
+    }
+    @Override
+    public WrappedBlockEnergyContainer getEnergyStorage() {
+        return energyContainer == null ? this.energyContainer = new WrappedBlockEnergyContainer(this, new InsertOnlyEnergyContainer(1000,1000)) : this.energyContainer;
     }
 
     @Override
@@ -507,7 +526,7 @@ public class SequencerBlockEntity extends SyncingContainerBlockEntity implements
         return cache;
     }
     public boolean canSynth(){
-        return !empty_tube_input.isEmpty() && plantMatterLevel >= 8 && sugarLevel >= 8 && boneMatterLevel >= 8 && waterLevel >= 500;
+        return !empty_tube_input.isEmpty() && plantMatterLevel >= 8 && sugarLevel >= 8 && boneMatterLevel >= 8 && waterLevel >= 500 && getEnergyStorage().getStoredEnergy() > calculateEnergyConsumption();
     }
     public void toggleSynth() {
         if(canSynth()) {

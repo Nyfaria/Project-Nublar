@@ -58,13 +58,16 @@ public class ModItemModelProvider extends ItemModelProvider {
                         ItemInit.INCUBATOR_ARM_BASE,
                         ItemInit.INCUBATOR_NEST,
                         ItemInit.UNINCUBATED_EGG,
-                        ItemInit.INCUBATED_EGG
+                        ItemInit.INCUBATED_EGG,
+                        ItemInit.WIRE_SPOOL
                 )
                 .map(Supplier::get)
                 .forEach(this::simpleGeneratedModel);
         simpleGeneratedModel(BlockInit.SEQUENCER.get().asItem());
         simpleGeneratedModel(BlockInit.EGG_PRINTER.get().asItem());
         simpleGeneratedModel(BlockInit.INCUBATOR.get().asItem());
+        simpleGeneratedModel(BlockInit.HIGH_SECURITY_ELECTRIC_FENCE_POST.get().asItem());
+        simpleGeneratedModel(BlockInit.LOW_SECURITY_ELECTRIC_FENCE_POST.get().asItem());
         FossilCollection.COLLECTIONS.forEach((s, fossilCollection) -> {
             fossilCollection.fossilblocks().forEach((block, qualityMap) -> {
                 qualityMap.forEach((quality, fossilPieceRegistryObjectMap) -> {

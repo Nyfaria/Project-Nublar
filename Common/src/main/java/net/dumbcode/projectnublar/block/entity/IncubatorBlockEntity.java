@@ -1,5 +1,8 @@
 package net.dumbcode.projectnublar.block.entity;
 
+import earth.terrarium.botarium.common.energy.base.BotariumEnergyBlock;
+import earth.terrarium.botarium.common.energy.impl.InsertOnlyEnergyContainer;
+import earth.terrarium.botarium.common.energy.impl.WrappedBlockEnergyContainer;
 import net.dumbcode.projectnublar.api.DinoData;
 import net.dumbcode.projectnublar.block.api.IMachineParts;
 import net.dumbcode.projectnublar.block.api.SyncingContainerBlockEntity;
@@ -26,7 +29,7 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class IncubatorBlockEntity extends SyncingContainerBlockEntity implements GeoBlockEntity, IMachineParts {
+public class IncubatorBlockEntity extends SyncingContainerBlockEntity implements GeoBlockEntity, IMachineParts, BotariumEnergyBlock<WrappedBlockEnergyContainer> {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private ItemStack plantMatterStack = ItemStack.EMPTY;
     private NonNullList<Slot> items = NonNullList.withSize(9, Slot.EMPTY);
@@ -39,6 +42,7 @@ public class IncubatorBlockEntity extends SyncingContainerBlockEntity implements
     private ItemStack lidStack = ItemStack.EMPTY;
     private ItemStack baseStack = ItemStack.EMPTY;
     private ItemStack armStack = ItemStack.EMPTY;
+    private WrappedBlockEnergyContainer energyContainer;
 
     public IncubatorBlockEntity(BlockPos pos, BlockState state) {
         super(BlockInit.INCUBATOR_BLOCK_ENTITY.get(), pos, state);
@@ -143,6 +147,7 @@ public class IncubatorBlockEntity extends SyncingContainerBlockEntity implements
         CompoundTag armTag = new CompoundTag();
         armStack.save(armTag);
         tag.put("armStack", armTag);
+        tag.put("energy", energyContainer.serialize(new CompoundTag()));
     }
 
     @Override
@@ -160,6 +165,7 @@ public class IncubatorBlockEntity extends SyncingContainerBlockEntity implements
         lidStack = ItemStack.of(tag.getCompound("lidStack"));
         baseStack = ItemStack.of(tag.getCompound("baseStack"));
         armStack = ItemStack.of(tag.getCompound("armStack"));
+        energyContainer.deserialize(tag.getCompound("energy"));
     }
 
     public ItemStack getNestStack() {
@@ -302,6 +308,7 @@ public class IncubatorBlockEntity extends SyncingContainerBlockEntity implements
             }
             if (level.getGameTime() % getTicksPerPercent() == 0)
                 if (be.items.stream().anyMatch(slot -> !slot.stack.isEmpty())) {
+                    getEnergyStorage().internalExtract(calculateEnergyConsumption(),true);
                     for (int i = 0; i < be.getSlotCount(); i++) {
                         Slot slot = be.items.get(i);
                         if (!slot.stack.isEmpty() && slot.stack.is(ItemInit.UNINCUBATED_EGG.get())) {
@@ -324,6 +331,35 @@ public class IncubatorBlockEntity extends SyncingContainerBlockEntity implements
                     }
                 }
         }
+    }
+    public int calculateEnergyConsumption(){
+        int c = 32;
+        if(tankStack.getItem() == ItemInit.GOLD_PLANT_TANK.get()) {
+            c += 8;
+        }
+        if(tankStack.getItem() == ItemInit.IRON_PLANT_TANK.get()) {
+            c += 4;
+        }
+        if(containerStack.getItem() == ItemInit.SMALL_CONTAINER_UPGRADE.get()) {
+            c += 4;
+        }
+        if(containerStack.getItem() == ItemInit.LARGE_CONTAINER_UPGRADE.get()) {
+            c += 8;
+        }
+        if(bulbStack.getItem() == ItemInit.WARM_BULB.get()) {
+            c += 5;
+        }
+        if(bulbStack.getItem() == ItemInit.WARMER_BULB.get()) {
+            c += 10;
+        }
+        if(bulbStack.getItem() == ItemInit.HOT_BULB.get()) {
+            c += 16;
+        }
+        return c;
+    }
+    @Override
+    public WrappedBlockEnergyContainer getEnergyStorage() {
+        return energyContainer == null ? this.energyContainer = new WrappedBlockEnergyContainer(this, new InsertOnlyEnergyContainer(1000,1000)) : this.energyContainer;
     }
 
     @Override

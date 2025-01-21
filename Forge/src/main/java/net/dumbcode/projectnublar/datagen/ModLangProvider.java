@@ -94,7 +94,8 @@ public class ModLangProvider extends LanguageProvider {
                 ItemInit.INCUBATOR_NEST,
                 ItemInit.SEQUENCER_COMPUTER,
                 ItemInit.SEQUENCER_DOOR,
-                ItemInit.SEQUENCER_SCREEN
+                ItemInit.SEQUENCER_SCREEN,
+                ItemInit.WIRE_SPOOL
         ).forEach(this::itemLang);
     }
 

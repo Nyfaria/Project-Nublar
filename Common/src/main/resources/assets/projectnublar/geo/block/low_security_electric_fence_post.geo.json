@@ -1,0 +1,316 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.Model",
+				"texture_width": 22,
+				"texture_height": 50,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 5.5,
+				"visible_bounds_offset": [0, 2.25, 0]
+			},
+			"bones": [
+				{
+					"name": "MainPole1",
+					"pivot": [-1, 48, 4.5],
+					"cubes": [
+						{"origin": [-1, 0, 4.5], "size": [2, 48, 2], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "Pole2",
+					"parent": "MainPole1",
+					"pivot": [-1, 55.08, -3.41],
+					"rotation": [45, 0, 0],
+					"cubes": [
+						{"origin": [-1, 43.08, -3.41], "size": [2, 12, 2], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "PoleLightStem",
+					"parent": "Pole2",
+					"pivot": [-0.5, 45.08, -1.51],
+					"rotation": [0, 0, 0],
+					"cubes": [
+						{"origin": [-0.5, 44.08, -1.51], "size": [1, 1, 2], "uv": [9, 18]}
+					]
+				},
+				{
+					"name": "PoleLight",
+					"parent": "PoleLightStem",
+					"pivot": [-1, 45.58, 0.49],
+					"rotation": [0, 0, 0],
+					"cubes": [
+						{"origin": [-1, 43.58, 0.49], "size": [2, 2, 4], "uv": [9, 24]}
+					]
+				},
+				{
+					"name": "CableHolder1",
+					"parent": "MainPole1",
+					"pivot": [-0.5, 4.5, 1.5],
+					"rotation": [0, -0.3, 0],
+					"cubes": [
+						{"origin": [-0.5, 3.5, 1.5], "size": [1, 1, 3], "uv": [9, 10]}
+					]
+				},
+				{
+					"name": "CabeHolder1MainStem1",
+					"parent": "CableHolder1",
+					"pivot": [-1.4, 4, 3.4],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 2, 3.4], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CabeHolder1Stem2",
+					"parent": "CableHolder1",
+					"pivot": [-1.4, 4, 2.3],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 2, 2.3], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CabeHolder1Stem3",
+					"parent": "CableHolder1",
+					"pivot": [-1.4, 4, 1.2],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 2, 1.2], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CableHolder1Ring1",
+					"parent": "CableHolder1",
+					"pivot": [0, 5.5, 0],
+					"rotation": [-45, 0, 0],
+					"cubes": [
+						{"origin": [0, 3.5, 0], "size": [0, 2, 2], "uv": [9, 0]}
+					]
+				},
+				{
+					"name": "CableHolder2",
+					"parent": "MainPole1",
+					"pivot": [-0.5, 12.5, 1.5],
+					"cubes": [
+						{"origin": [-0.5, 11.5, 1.5], "size": [1, 1, 3], "uv": [9, 10]}
+					]
+				},
+				{
+					"name": "CabeHolder2MainStem1",
+					"parent": "CableHolder2",
+					"pivot": [-1.4, 12, 3.4],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 10, 3.4], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CabeHolder2Stem2",
+					"parent": "CableHolder2",
+					"pivot": [-1.4, 12, 2.3],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 10, 2.3], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CabeHolder2Stem3",
+					"parent": "CableHolder2",
+					"pivot": [-1.4, 12, 1.2],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 10, 1.2], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CableHolder2Ring1",
+					"parent": "CableHolder2",
+					"pivot": [0, 13.5, 0],
+					"rotation": [-45, 0, 0],
+					"cubes": [
+						{"origin": [0, 11.5, 0], "size": [0, 2, 2], "uv": [9, 0]}
+					]
+				},
+				{
+					"name": "CableHolder3",
+					"parent": "MainPole1",
+					"pivot": [-0.5, 20.5, 1.5],
+					"cubes": [
+						{"origin": [-0.5, 19.5, 1.5], "size": [1, 1, 3], "uv": [9, 10]}
+					]
+				},
+				{
+					"name": "CabeHolder3MainStem1",
+					"parent": "CableHolder3",
+					"pivot": [-1.4, 20, 3.4],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 18, 3.4], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CabeHolder3Stem2",
+					"parent": "CableHolder3",
+					"pivot": [-1.4, 20, 2.3],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 18, 2.3], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CabeHolder3Stem3",
+					"parent": "CableHolder3",
+					"pivot": [-1.4, 20, 1.2],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 18, 1.2], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CableHolder3Ring1",
+					"parent": "CableHolder3",
+					"pivot": [0, 21.5, 0],
+					"rotation": [-45, 0, 0],
+					"cubes": [
+						{"origin": [0, 19.5, 0], "size": [0, 2, 2], "uv": [9, 0]}
+					]
+				},
+				{
+					"name": "CableHolder4",
+					"parent": "MainPole1",
+					"pivot": [-0.5, 28.5, 1.5],
+					"cubes": [
+						{"origin": [-0.5, 27.5, 1.5], "size": [1, 1, 3], "uv": [9, 10]}
+					]
+				},
+				{
+					"name": "CabeHolder4MainStem1",
+					"parent": "CableHolder4",
+					"pivot": [-1.4, 28, 3.4],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 26, 3.4], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CabeHolder4Stem2",
+					"parent": "CableHolder4",
+					"pivot": [-1.4, 28, 2.3],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 26, 2.3], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CabeHolder4Stem3",
+					"parent": "CableHolder4",
+					"pivot": [-1.4, 28, 1.2],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 26, 1.2], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CableHolder4Ring1",
+					"parent": "CableHolder4",
+					"pivot": [0, 29.5, 0],
+					"rotation": [-45, 0, 0],
+					"cubes": [
+						{"origin": [0, 27.5, 0], "size": [0, 2, 2], "uv": [9, 0]}
+					]
+				},
+				{
+					"name": "CableHolder5",
+					"parent": "MainPole1",
+					"pivot": [-0.5, 36.5, 1.5],
+					"cubes": [
+						{"origin": [-0.5, 35.5, 1.5], "size": [1, 1, 3], "uv": [9, 10]}
+					]
+				},
+				{
+					"name": "CabeHolder5MainStem1",
+					"parent": "CableHolder5",
+					"pivot": [-1.4, 36, 3.4],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 34, 3.4], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CabeHolder5Stem2",
+					"parent": "CableHolder5",
+					"pivot": [-1.4, 36, 2.3],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 34, 2.3], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CabeHolder5Stem3",
+					"parent": "CableHolder5",
+					"pivot": [-1.4, 36, 1.2],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 34, 1.2], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CableHolder5Ring1",
+					"parent": "CableHolder5",
+					"pivot": [0, 37.5, 0],
+					"rotation": [-45, 0, 0],
+					"cubes": [
+						{"origin": [0, 35.5, 0], "size": [0, 2, 2], "uv": [9, 0]}
+					]
+				},
+				{
+					"name": "CableHolder6",
+					"parent": "MainPole1",
+					"pivot": [-0.5, 44.5, 1.5],
+					"cubes": [
+						{"origin": [-0.5, 43.5, 1.5], "size": [1, 1, 3], "uv": [9, 10]}
+					]
+				},
+				{
+					"name": "CabeHolder6MainStem1",
+					"parent": "CableHolder6",
+					"pivot": [-1.4, 44, 3.4],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 42, 3.4], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CabeHolder6Stem2",
+					"parent": "CableHolder6",
+					"pivot": [-1.4, 44, 2.3],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 42, 2.3], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CabeHolder6Stem3",
+					"parent": "CableHolder6",
+					"pivot": [-1.4, 44, 1.2],
+					"rotation": [0, 0, -45],
+					"cubes": [
+						{"origin": [-1.4, 42, 1.2], "size": [2, 2, 1], "uv": [9, 5]}
+					]
+				},
+				{
+					"name": "CableHolder6Ring1",
+					"parent": "CableHolder6",
+					"pivot": [0, 45.5, 0],
+					"rotation": [-45, 0, 0],
+					"cubes": [
+						{"origin": [0, 43.5, 0], "size": [0, 2, 2], "uv": [9, 0]}
+					]
+				}
+			]
+		}
+	]
+}

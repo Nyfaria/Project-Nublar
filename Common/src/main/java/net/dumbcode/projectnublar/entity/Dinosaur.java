@@ -47,6 +47,11 @@ public class Dinosaur extends PathfinderMob implements FossilRevived, GeoEntity 
         return this.entityData.get(DINO_DATA);
     }
 
+    @Override
+    public void checkDespawn() {
+
+    }
+
     public Color layerColor(int layer, DinoLayer dinoLayer) {
         if(dinoLayer != null && dinoLayer.getBasicLayer() == -1){
             return new Color(0xFFFFFFFF);
